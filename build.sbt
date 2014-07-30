@@ -16,6 +16,8 @@
 
 name := "Granthi"
 
+organization := "granthi"
+
 version := "0.2.0"
 
 javacOptions ++= Seq("-source", "1.8", "-target", "1.8")

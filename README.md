@@ -1,15 +1,14 @@
 ##Granthi
 
-Granthi is a Sanskrit word for node and the name for this Scala API that provides a way to define Neo4j database nodes and edges as case classes.
-Granthi lets the programmer decide when he wants to interact with the database. Writing an modifying nodes and edges is possible by using add, 
-update, merge or delete. A Scala object `AskNeo4jFor` give you method to load some nodes and edges from the database into the Granthi nodes
-and edges. The graph properties must be either standard types or complex types that are wrapped a case class that extends the trait
-`GranthiProperty`.
+Granthi means 'node' in Sanskrit and named this Scala API which provides an easy way to define Neo4j database nodes and edges as case classes.
+Granthi lets the programmer decide when he wants to interact with the database like an entity manager API for O/R-Mappers. Because in Neo4j 
+every property is simple typed Granthi offers a small wrapper API for complex properties to convert data to store into simple typed data and
+back again into the complex type.
 
-For the communication with the Neo4j database Granthi uses [AnormCypher](http://anormcypher.org). Hence you need to run a Neo4J server. Because it is
-very easy to install an start a Neo4j server on localhost, there is no need for supporting the embedded version of Neo4j. The whole magic to 
-interact between the Granthi nodes and edges and the regarding Neo4j elements is done by Scala 2.11 reflection (see 
-http://docs.scala-lang.org/overviews/reflection/overview.html)
+For the communication with the Neo4j database Granthi uses [AnormCypher](http://anormcypher.org). Hence you need to run a Neo4J server. 
+Because it is very easy to install and start a Neo4j server on localhost, there exists currently no support for the embedded version 
+of Neo4j. The whole magic to interact between the Scala classes and the regarding Neo4j elements is done by Scala 2.11 reflection (see 
+http://docs.scala-lang.org/overviews/reflection/overview.html).
 
 ##Build 
 
@@ -29,8 +28,9 @@ tests and therefore you must edit the test classes too, if you want to run the t
 To define a domain of nodes and edges you my use case classes that extends the abstract classes `GranthiNode` or `GranthiEdge`:
 
 ``` Scala
+// A Node
 case class Person(firstname: String, lastname: String, age: Int) extends GranthiNode[Person]
-
+// An Edge
 case class IsMarriedWith(person1: Person, person2: Person, since: LocalDateProperty) extends GranthiEdge[IsMarriedWith, Person, Person]
 ```
 
