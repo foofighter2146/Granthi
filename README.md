@@ -16,7 +16,8 @@ To build (or run) Granthi, you need
 
 - Java 8
 - sbt 0.13.5
-- Neo4j 2.1.2 Server  
+- Neo4j 2.1.2 Server 
+- Scala 2.11
 
 Maybe you wonder about the decision to use Java 8. Java 8 is the current Java framework and provides a simple to use date/time API. 
 Date and time values are often used as data. But it is not too difficult to change to Java 7. You have to edit the `build.sbt` file
@@ -27,6 +28,14 @@ To compile, generate and publish the jar in your local ivy repository, you have 
 
 ``` Scala
 sbt publishLocal
+```
+
+To include this in your project, you have to add the library dependencies to your `build.sbt` like
+
+``` Scala
+libraryDependencies ++= Seq(
+  "granthi" %% "granthi" % "0.2.0"
+)
 ```
 
 If you want to tryout the Tests, then you have to start a Neo4j 2.1 Server first. The test run expected either a Neo4j Server
