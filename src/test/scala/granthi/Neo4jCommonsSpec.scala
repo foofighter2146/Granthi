@@ -23,10 +23,11 @@ import granthi.Neo4jCommons._
 import org.scalatest._
 
 class Neo4jCommonsSpec extends FlatSpec with Matchers {
+  import GranthiProperties._
 
   "Neo4j Common Interactions" should "convert the fields of a node into Cypher properties as a String" in {
     // Because the order of the properties inside the string is abritrary, the string must be parsed in a map first
-    val peter = Person_GQT_("Shaw", "Peter", 43, new LocalDateProperty(LocalDate.of(1970, 8, 23)))
+    val peter = Person_GQT_("Shaw", "Peter", 43, LocalDate.of(1970, 8, 23))
     val remappedString = parseCypherPropertiesString(fieldsAsCypherPropsString(peter, CreateOrFind), ":")
     remappedString("tag") shouldBe "'granthitest'"
     remappedString("lastname") shouldBe "'Shaw'"
@@ -37,9 +38,9 @@ class Neo4jCommonsSpec extends FlatSpec with Matchers {
 
   it should "convert the fields of an edge into Cypher properties as a String" in {
     // Because the order of the properties inside the string is abritrary, the string must be parsed in a map first
-    val peter = Person_GQT_("Shaw", "Peter", 43, new LocalDateProperty(LocalDate.of(1970, 8, 23)))
-    val dana = Person_GQT_("Shaw", "Dana", 41, new LocalDateProperty(LocalDate.of(1972, 11, 12)))
-    val peterAndDana = IsMarriedWith_GQT_(peter, dana, new LocalDateProperty(LocalDate.of(1990, 9, 9)), "rk")
+    val peter = Person_GQT_("Shaw", "Peter", 43, LocalDate.of(1970, 8, 23))
+    val dana = Person_GQT_("Shaw", "Dana", 41, LocalDate.of(1972, 11, 12))
+    val peterAndDana = IsMarriedWith_GQT_(peter, dana, LocalDate.of(1990, 9, 9), "rk")
     val remappedString = parseCypherPropertiesString(fieldsAsCypherPropsString(peterAndDana, CreateOrFind), ":")
     remappedString("since") shouldBe "'1990-09-09'"
     remappedString("confession") shouldBe "'rk'"
@@ -66,7 +67,7 @@ class Neo4jCommonsSpec extends FlatSpec with Matchers {
     s.replace('{', ' ').replace('}',' ').split(",").toList.map(_.split(keyValueSplitter).toList.map(_.trim)).map(x => (x.head, x.tail.head)).toMap
 
   it should "create a new node from id, a property map and the class of the new node" in {
-    val peter = Person_GQT_("Shaw", "Peter", 43, new LocalDateProperty(LocalDate.of(1970, 8, 23)))
+    val peter = Person_GQT_("Shaw", "Peter", 43, LocalDate.of(1970, 8, 23))
     peter.graphId = Some(42)
     val peter2 = newGranthiNodeByType[Person_GQT_](42,
       Map("lastname" -> "Shaw", "firstname" -> "Peter", "age" -> BigDecimal(43), "birthdate" -> "1970-08-23", "tag" -> "granthitest"))
@@ -82,9 +83,9 @@ class Neo4jCommonsSpec extends FlatSpec with Matchers {
   }
 
   it should "create a new edge from id, a property map, a start node, an end node and the classes of the new edge and both nodes" in {
-    val peter = Person_GQT_("Shaw", "Peter", 43, new LocalDateProperty(LocalDate.of(1970, 8, 23)))
-    val dana = Person_GQT_("Shaw", "Dana", 41, new LocalDateProperty(LocalDate.of(1972, 11, 12)))
-    val peterAndDana = IsMarriedWith_GQT_(peter, dana, new LocalDateProperty(LocalDate.of(1990, 9, 9)), "rk")
+    val peter = Person_GQT_("Shaw", "Peter", 43, LocalDate.of(1970, 8, 23))
+    val dana = Person_GQT_("Shaw", "Dana", 41, LocalDate.of(1972, 11, 12))
+    val peterAndDana = IsMarriedWith_GQT_(peter, dana, LocalDate.of(1990, 9, 9), "rk")
     peterAndDana.graphId = Some(5)
     val peterAndDana2 = newGranthiEdgeByType[IsMarriedWith_GQT_, Person_GQT_, Person_GQT_](
       5, peter, dana, Map("since" -> "1990-09-09", "confession" -> "rk"), AnormCypherType)
@@ -93,7 +94,7 @@ class Neo4jCommonsSpec extends FlatSpec with Matchers {
   }
 
   it should "create a new edge from id, an empty property map, a start node, an end node and the classes of the new edge and both nodes" in {
-    val peter = Person_GQT_("Shaw", "Peter", 43, new LocalDateProperty(LocalDate.of(1970, 8, 23)))
+    val peter = Person_GQT_("Shaw", "Peter", 43, LocalDate.of(1970, 8, 23))
     val shawp = User_GQT_("shawp", new Date())
     val userOfPeter = HasUser_GQT_(peter, shawp)
     userOfPeter.graphId = Some(6)
@@ -105,7 +106,7 @@ class Neo4jCommonsSpec extends FlatSpec with Matchers {
   it should "create a new node with properties" in {
     val peter = newGranthiNodeByName(42, Map("lastname" -> "Shaw", "firstname" -> "Peter",
       "age" -> BigDecimal(43), "birthdate" -> "1970-08-23", "tag" -> "granthitest", "_granthiType_" -> "granthi.Person_GQT_"))
-    peter shouldBe Person_GQT_("Shaw", "Peter", 43, new LocalDateProperty(LocalDate.of(1970, 8, 23)))
+    peter shouldBe Person_GQT_("Shaw", "Peter", 43, LocalDate.of(1970, 8, 23))
   }
 
   it should "create a new empty node" in {
@@ -120,7 +121,6 @@ class Neo4jCommonsSpec extends FlatSpec with Matchers {
       "age" -> BigDecimal(41), "birthdate" -> "1972-11-12", "tag" -> "granthitest", "_granthiType_" -> "granthi.Person_GQT_"))
     val peterAndDana = newGranthiEdgeByName(3, peter, dana, Map("since" -> "1990-09-09", "confession" -> "rk",
       "_granthiType_" -> "granthi.IsMarriedWith_GQT_"))
-    peterAndDana shouldBe IsMarriedWith_GQT_(peter.asInstanceOf[Person_GQT_],
-      dana.asInstanceOf[Person_GQT_], new LocalDateProperty(LocalDate.of(1990, 9, 9)), "rk")
+    peterAndDana shouldBe IsMarriedWith_GQT_(peter.asInstanceOf[Person_GQT_],dana.asInstanceOf[Person_GQT_], LocalDate.of(1990, 9, 9), "rk")
   }
 }

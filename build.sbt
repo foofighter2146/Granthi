@@ -18,7 +18,7 @@ name := "Granthi"
 
 organization := "granthi"
 
-version := "0.2.0"
+version := "0.2.1"
 
 javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 
@@ -28,7 +28,7 @@ initialize := {
     sys.error("Java 8 is required for this project.")
 }
 
-scalaVersion := "2.11.1"
+scalaVersion := "2.11.2"
 
 resolvers ++= Seq(
   "neo4j-releases" at "http://m2.neo4j.org/releases/",
@@ -40,7 +40,7 @@ resolvers ++= Seq(
 libraryDependencies ++= Seq(
   "org.neo4j" % "neo4j" % "2.1.2",
   "org.anormcypher" %% "anormcypher" % "0.5.1",
-  "org.scala-lang" % "scala-reflect" % "2.11.1",
+  "org.scala-lang" % "scala-reflect" % "2.11.2",
   "com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2" % "test",
   "ch.qos.logback" % "logback-classic" % "1.1.2" % "test",
   "org.scalatest" % "scalatest_2.11" % "2.2.0" % "test"

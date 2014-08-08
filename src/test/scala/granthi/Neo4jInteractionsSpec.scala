@@ -27,6 +27,7 @@ import org.scalatest._
  * mismatches.
  */
 class Neo4jInteractionsSpec extends FlatSpec with Matchers with BeforeAndAfterAll {
+  import GranthiProperties._
 
   override def beforeAll() = {
     Neo4jREST.setServer(scala.util.Properties.envOrElse("NEO4J_SERVER", "localhost"))
@@ -62,7 +63,7 @@ class Neo4jInteractionsSpec extends FlatSpec with Matchers with BeforeAndAfterAl
   /* First test only nodes */
 
   "The Neo4j persistence API" should "init the graphId after adding a node to database" in {
-    val bob = Person_GQT_("Builder", "Bob", 42, new LocalDateProperty(LocalDate.of(1972, 9, 12)))
+    val bob = Person_GQT_("Builder", "Bob", 42, LocalDate.of(1972, 9, 12))
     bob.graphId shouldBe None
     Neo4jNodes + bob
     bob.graphId should not be None
@@ -115,7 +116,7 @@ class Neo4jInteractionsSpec extends FlatSpec with Matchers with BeforeAndAfterAl
   }
 
   it should "decide to add a node to database if its graphId is None when merge is called" in {
-    val micky = Person_GQT_("Mouse", "Micky", 86, new LocalDateProperty(LocalDate.of(1928, 11, 18)))
+    val micky = Person_GQT_("Mouse", "Micky", 86, LocalDate.of(1928, 11, 18))
     micky.graphId shouldBe None
     Neo4jNodes ~ micky
     micky.graphId should not be None
@@ -141,7 +142,7 @@ class Neo4jInteractionsSpec extends FlatSpec with Matchers with BeforeAndAfterAl
   }
 
   it should "not delete a not persistent node from database" in {
-    val daisy = Person_GQT_("Duck", "Daisy", 94, new LocalDateProperty(LocalDate.of(1920, 1, 9)))
+    val daisy = Person_GQT_("Duck", "Daisy", 94,LocalDate.of(1920, 1, 9))
     AskNeo4jFor.allNodes[Person_GQT_] should not contain daisy
     an[GranthiException] should be thrownBy (Neo4jNodes - daisy)
   }
@@ -181,7 +182,7 @@ class Neo4jInteractionsSpec extends FlatSpec with Matchers with BeforeAndAfterAl
   }
 
   it should "fail adding an edge if its start node does not exists in database" in {
-    val manni = Person_GQT_("Shaw", "Manni", 65, new LocalDateProperty(LocalDate.of(1949, 1, 15)))
+    val manni = Person_GQT_("Shaw", "Manni", 65, LocalDate.of(1949, 1, 15))
     val peter =  AskNeo4jFor.nodes[Person_GQT_](Map("lastname" -> "Shaw", "firstname" -> "Peter")).head
     val daddyKnowsSon = Knows_GQT_(manni, peter, 43)
     an [GranthiException] should be thrownBy Neo4jEdges.add(daddyKnowsSon)
@@ -189,7 +190,7 @@ class Neo4jInteractionsSpec extends FlatSpec with Matchers with BeforeAndAfterAl
 
   it should "fail adding an edge if its end node does not exists in database" in {
     val peter =  AskNeo4jFor.nodes[Person_GQT_](Map("lastname" -> "Shaw", "firstname" -> "Peter")).head
-    val manni = Person_GQT_("Shaw", "Manni", 65, new LocalDateProperty(LocalDate.of(1949, 1, 15)))
+    val manni = Person_GQT_("Shaw", "Manni", 65, LocalDate.of(1949, 1, 15))
     val sonKnowsDaddy = Knows_GQT_(peter, manni, 40)
     an [GranthiException] should be thrownBy Neo4jEdges.add(sonKnowsDaddy)
   }
@@ -288,7 +289,7 @@ class Neo4jInteractionsSpec extends FlatSpec with Matchers with BeforeAndAfterAl
 
   it should "connect two nodes with a new edge and suitable properties" in {
     val peter = AskNeo4jFor.nodes[Person_GQT_](Map("lastname" -> "Shaw", "firstname" -> "Peter")).head
-    val paul = Person_GQT_("Parker", "Paul", 51, new LocalDateProperty(LocalDate.of(1961, 12, 25)))
+    val paul = Person_GQT_("Parker", "Paul", 51, LocalDate.of(1961, 12, 25))
     val peterKnowsPaul = Neo4jNodes.connect(peter, paul, classOf[Knows_GQT_], Map("years" -> 35))
     AskNeo4jFor.allEdges[Knows_GQT_, Person_GQT_](Outgoing) should contain (peterKnowsPaul)
   }

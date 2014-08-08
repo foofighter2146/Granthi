@@ -34,7 +34,7 @@ To include this in your project, you have to add the library dependencies to you
 
 ``` Scala
 libraryDependencies ++= Seq(
-  "granthi" %% "granthi" % "0.2.0"
+  "granthi" %% "granthi" % "0.2.1"
 )
 ```
 
@@ -98,7 +98,7 @@ case class Knows(person1: Person, person2: Person) extends GranthiEdge[IsMarried
 val peter = Person("Smith", "Peter", 42)
 val dana = Person("Smith", "Dana", 42)
 
-val peterAndDana = Neo4jNodes.connect(peter, dana, classOf[IsMarriedWith], Map("since" -> new LocalDateProperty(LocalDate.of(2002, 9, 9))))
+val peterAndDana = Neo4jNodes.connect(peter, dana, classOf[IsMarriedWith], Map("since" -> LocalDate.of(2002, 9, 9)))
 val danaKnowsPeter = Neo4jNodes.connect(dana, peter, classOf[Knows])
 
 Neo4jNodes.disconnect(dana, peter, classOf[Knows])
@@ -134,6 +134,9 @@ case class DateProperty(date: Date) extends GranthiProperty[Long] {
 }
 ```
 
+The object `GranthiProperties` includes implicit wrappers for these pre-defined properties. With `import GranthiProperties._` you can use
+`BigDecimal(42)` instead of `new BigDecimalProperty(BigDecimal(42))` as parameters of nodes or edges.
+  
 ##Licence Apache 2.0
 
 Licensed under the Apache License, Version 2.0 (the "License");

@@ -25,8 +25,9 @@ import scala.reflect.runtime.universe._
 /**
  * This object contains all methods that are necessary for Neo4j database
  * interactions for nodes and edges both. It uses <code>GraphReflections</code>.
+ * It is only visible inside package 'granthi'.
  */
-object Neo4jCommons {
+private[granthi] object Neo4jCommons {
 
   /**
    * Converts all fields of a graph element into a String that contains field names

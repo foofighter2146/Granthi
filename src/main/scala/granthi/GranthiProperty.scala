@@ -16,6 +16,8 @@
 
 package granthi
 
+import scala.language.implicitConversions
+
 import java.util.Date
 import java.time.{LocalDateTime, LocalTime, LocalDate}
 
@@ -63,4 +65,16 @@ case class BigIntProperty(bigInt: BigInt) extends GranthiProperty[String] {
   def this(bigIntAsString: String) = this(BigInt(bigIntAsString))
   def to = bigInt.toString()
   override def toString: String = bigInt.toString()
+}
+
+/**
+ * Defines some implicit wrappers for easier usage
+ */
+object GranthiProperties {
+  implicit def wrapDate(date: Date) = new DateProperty(date)
+  implicit def wrapLocalDate(localDate: LocalDate) = new LocalDateProperty(localDate)
+  implicit def wrapLocalTime(localTime: LocalTime) = new LocalTimeProperty(localTime)
+  implicit def wrapLocalDateTime(localDateTime: LocalDateTime) = new LocalDateTimeProperty(localDateTime)
+  implicit def wrapBigDecimal(bigDecimal: BigDecimal) = new BigDecimalProperty(bigDecimal)
+  implicit def wrapBigInt(bigInt: BigInt) = new BigIntProperty(bigInt)
 }

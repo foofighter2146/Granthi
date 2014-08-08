@@ -24,8 +24,9 @@ import scala.reflect.runtime.universe._
 /**
  * This object provides methods based on Scala reflection to access
  * fields of an graph element.
+ * It is only visible inside package 'granthi'.
  */
-object GraphReflections {
+private[granthi] object GraphReflections {
 
   /**
    * Gets all fields of an instance of a class of generic type T as
