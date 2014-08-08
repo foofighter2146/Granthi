@@ -16,7 +16,7 @@ To build (or run) Granthi, you need
 
 - Java 8
 - sbt 0.13.5
-- Neo4j 2.1.2 Server 
+- Neo4j 2.1.3 Server 
 - Scala 2.11
 
 Maybe you wonder about the decision to use Java 8. Java 8 is the current Java framework and provides a simple to use date/time API. 

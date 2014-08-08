@@ -38,7 +38,7 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "org.neo4j" % "neo4j" % "2.1.2",
+  "org.neo4j" % "neo4j" % "2.1.3",
   "org.anormcypher" %% "anormcypher" % "0.5.1",
   "org.scala-lang" % "scala-reflect" % "2.11.2",
   "com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2" % "test",
