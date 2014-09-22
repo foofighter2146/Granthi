@@ -49,7 +49,8 @@ To define a domain of nodes and edges you may use case classes that extends the 
 // A Node
 case class Person(firstname: String, lastname: String, age: Int) extends GranthiNode[Person]
 // An Edge
-case class IsMarriedWith(person1: Person, person2: Person, since: LocalDateProperty) extends GranthiEdge[IsMarriedWith, Person, Person]
+case class IsMarriedWith(person1: Person, person2: Person, since: LocalDateProperty) 
+    extends GranthiEdge[IsMarriedWith, Person, Person](person1, person2)
 ```
 
 A field of a node or an edge must be either of type String, Char, Int, Short, Long, Byte, Double, Float, Boolean or a complex data type
