@@ -315,9 +315,15 @@ class Neo4jInteractionsSpec extends FlatSpec with Matchers with BeforeAndAfterAl
   it should "disconnect two nodes" in {
     val peter = AskNeo4jFor.nodes[Person_GQT_](Map("lastname" -> "Shaw", "firstname" -> "Peter")).head
     val dana = AskNeo4jFor.nodes[Person_GQT_](Map("lastname" -> "Shaw", "firstname" -> "Dana")).head
+    val fred = Person_GQT_("Flintstone", "Fred", 76, LocalDate.of(1938, 9, 10))
+    Neo4jNodes + fred
     val peterKnowsDana = Neo4jNodes.connect(peter, dana, classOf[Knows_GQT_], Map("years" -> 23))
+    val peterKnowsFred = Neo4jNodes.connect(peter, fred, classOf[Knows_GQT_], Map("years" -> 42))
     AskNeo4jFor.allIncidentEdges(peter,Outgoing) should contain (peterKnowsDana)
     Neo4jNodes.disconnect(peter, dana, classOf[Knows_GQT_])
-    AskNeo4jFor.allIncidentEdges(peter,Outgoing) should not contain peterKnowsDana
+    val incEdges = AskNeo4jFor.allIncidentEdges(peter,Outgoing)
+    incEdges should not contain peterKnowsDana
+    incEdges should contain (peterKnowsFred)
+
   }
 }

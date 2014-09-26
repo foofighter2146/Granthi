@@ -240,6 +240,8 @@ object Neo4jNodes {
                                                                                      classTagN: ClassTag[N],
                                                                                      classTagM: ClassTag[M]) {
     val edges = AskNeo4jFor.incidentEdgesForRel(from, Outgoing, by)
-    for (edge <- edges) Cypher(s"MATCH ()-[r]-() WHERE id(r) = ${edge.graphId.get} DELETE r").execute()
+    edges filter(edge => edge.endNode.equals(to)) foreach {
+      edge => Cypher(s"MATCH ()-[r]-() WHERE id(r) = ${edge.graphId.get} DELETE r").execute()
+    }
   }
 }
